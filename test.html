@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Dasturchilik Testi (Dark Mode)</title>
+    <style>
+        /* Ranglar o'zgaruvchilari (Dark Theme) */
+        :root {
+            --primary-color: #6366f1; /* Indigo */
+            --primary-hover: #4f46e5;
+            --accent-color: #818cf8;
+            --background-color: #0f172a; /* Juda to'q ko'k-kulrang */
+            --card-bg: #1e293b; /* To'q kulrang karta */
+            --text-color: #f8fafc; /* Oq rangga yaqin */
+            --secondary-text: #94a3b8; /* Kulrang matn */
+            --border-color: #334155;
+            --success-color: #10b981; /* Yashil */
+            --error-color: #ef4444; /* Qizil */
+            --warning-color: #f59e0b; /* Sariq */
+            --option-hover: #334155;
+            --option-selected: #312e81; /* To'q binafsha */
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-image: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 20%),
+                              radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 20%);
+        }
+
+        /* Header Styles */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a5b4fc 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: var(--secondary-text);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Main Container */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Start Screen */
+        .start-screen {
+            padding: 50px 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            flex-grow: 1;
+        }
+
+        .start-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.5));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 30px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn:disabled {
+            background: var(--border-color);
+            color: var(--secondary-text);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Quiz Screen */
+        .quiz-screen {
+            display: none;
+            padding: 30px;
+            flex-grow: 1;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .question-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .topic-badge {
+            background-color: rgba(99, 102, 241, 0.15);
+            color: var(--accent-color);
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .question-count {
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-card {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 18px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card:hover {
+            background-color: var(--option-hover);
+            border-color: var(--secondary-text);
+            transform: translateX(5px);
+        }
+
+        .option-card.selected {
+            border-color: var(--primary-color);
+            background-color: var(--option-selected);
+            box-shadow: 0 0 0 1px var(--primary-color);
+        }
+
+        /* To'g'ri va noto'g'ri javob uchun (agar kerak bo'lsa) */
+        .option-card.correct {
+            border-color: var(--success-color);
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .option-card.wrong {
+            border-color: var(--error-color);
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+        }
+
+        .option-indicator {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--secondary-text);
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--secondary-text);
+            transition: var(--transition);
+        }
+
+        .option-card.selected .option-indicator {
+            border-color: var(--accent-color);
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Result Screen */
+        .result-screen {
+            display: none;
+            padding: 40px;
+            text-align: center;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .score-circle {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-color) 0%, #334155 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .score-circle::before {
+            content: "";
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+        }
+
+        .score-text {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .score-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--text-color);
+        }
+
+        .score-total {
+            font-size: 1rem;
+            color: var(--secondary-text);
+        }
+
+        .message {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .details {
+            color: var(--secondary-text);
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--secondary-text);
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .container { border-radius: 0; height: 100vh; border: none; }
+            body { padding: 0; }
+            .stats-grid { grid-template-columns: 1fr; gap: 10px; }
+            .start-screen { padding: 30px 20px; }
+            .question-text { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Python Master</h1>
+        <p class="subtitle">OOP, Telegram Botlar va Ma'lumotlar Bazasi Testi</p>
+    </header>
+
+    <main class="container">
+        <!-- Start Screen -->
+        <section id="start-screen" class="start-screen">
+            <div class="start-icon">🤖</div>
+            <h2 style="font-size: 1.8rem; margin-bottom: 15px;">Bilimlaringizni sinang!</h2>
+            <p style="color: var(--secondary-text); line-height: 1.6; max-width: 500px;">
+                Python dasturlash tilidagi OOP asoslari, Telegram bot yaratish va ma'lumotlar bazalari bo‘yicha 15 ta savol.
+            </p>
+            <button class="btn" onclick="startQuiz()">Testni Boshlash</button>
+        </section>
+
+        <!-- Quiz Screen -->
+        <section id="quiz-screen" class="quiz-screen">
+            <div class="progress-bar-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            
+            <div class="question-meta">
+                <span id="topic-badge" class="topic-badge">Mavzu: OOP</span>
+                <span id="question-count" class="question-count">Savol: 1 / 15</span>
+            </div>
+
+            <h3 id="question-text" class="question-text">Savol matni shu yerga keladi?</h3>
+
+            <div id="options-container" class="options-grid">
+                <!-- Options will be injected here via JS -->
+            </div>
+
+            <div style="margin-top: 30px; text-align: right;">
+                <button id="next-btn" class="btn" onclick="nextQuestion()" disabled>Keyingi savol</button>
+            </div>
+        </section>
+
+        <!-- Result Screen -->
+        <section id="result-screen" class="result-screen">
+            <div class="score-circle" id="score-circle">
+                <div class="score-text">
+                    <span class="score-number" id="final-score">0</span>
+                    <span class="score-total">/ 100</span>
+                </div>
+            </div>
+            
+            <h2 class="message" id="result-message">Ajoyib!</h2>
+            <p class="details" id="result-details">Siz barcha savollarni to‘g‘ri javob berdingiz.</p>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-correct">0</div>
+                    <div class="stat-label">To‘g‘ri</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-wrong">0</div>
+                    <div class="stat-label">Noto‘g‘ri</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-percent">0%</div>
+                    <div class="stat-label">Foiz</div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="restartQuiz()">Qayta Boshlash</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Python Quiz Dark Edition. Barcha huquqlar himoyalangan.</p>
+    </footer>
+
+    <script>
+        // Test ma'lumotlari (Savollar va javoblar)
+        const questions = [
+            // 1. OOPga kirish
+            {
+                topic: "OOPga kirish",
+                question: "Python da OOP nima degani tushuniladi va obyekt (object) nima?",
+                options: [
+                    "Obyekt - bu dastur kodining satrlari.",
+                    "Obyekt - bu klassdan yaratilgan konkret nusxa (instance), ma'lumot va funksiyalarning yig‘indisi.",
+                    "Obyekt - bu faqat funksiyalar to‘plami.",
+                    "Obyekt - bu o‘zgaruvchilar saqlash joyi."
+                ],
+                correct: 1
+            },
+            {
+                topic: "OOPga kirish",
+                question: "`__init__` metodi qanday vazifani bajaradi?",
+                options: [
+                    "Dasturni ishga tushirish uchun.",
+                    "Klassni o‘chirib yuborish uchun.",
+                    "Yangi obyekt yaratilganda uning xususiyatlarini (attributes) boshlang‘ich qiymatlarini berish (initsializatsiya qilish) uchun.",
+                    "Matnni ekranga chiqarish uchun."
+                ],
+                correct: 2
+            },
+            // 2. Inkapsulyatsiya
+            {
+                topic: "Inkapsulyatsiya",
+                question: "Python da o‘zgaruvchini 'private' (xususiy) qilish uchun qanday belgi ishlatiladi?",
+                options: [
+                    "# (hash)",
+                    "_ (pastki chiziq)",
+                    "__ (ikki pastki chiziq)",
+                    "* (yulduzcha)"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Inkapsulyatsiya",
+                question: "`@property` dekoratori nima uchun ishlatiladi?",
+                options: [
+                    "Obyektni o‘chirish uchun.",
+                    "Klass o‘zgaruvchisini usul (method) kabi chaqirishga, lekin maydon (attribute) kabi ishlashga imkon beradi (getter).",
+                    "Yangi klass yaratish uchun.",
+                    "Funksiyani sekinlashtirish uchun."
+                ],
+                correct: 1
+            },
+            // 3. Merosxo‘rlik
+            {
+                topic: "Merosxo‘rlik",
+                question: "Merosxo‘rlik (Inheritance) nima?",
+                options: [
+                    "Bir klassning xususiyatlarini va usullarini boshqa klassga o‘tkazish jarayoni.",
+                    "Obyektning ichidagi ma'lumotlarni yashirish.",
+                    "Kodni反复 qayta yozish.",
+                    "Funksiyalarni o‘zaro bog‘lash."
+                ],
+                correct: 0
+            },
+            {
+                topic: "Merosxo‘rlik",
+                question: "`super()` funksiyasi qanday ishlatiladi?",
+                options: [
+                    "Ota klassning (parent class) metodlarini chaqirish uchun.",
+                    "O‘g‘il klassni o‘chirish uchun.",
+                    "Global o‘zgaruvchilarni e'lon qilish uchun.",
+                    "Dasturni to‘xtatish uchun."
+                ],
+                correct: 0
+            },
+            // 4. Polimorfizm va Abstraksiya
+            {
+                topic: "Polimorfizm",
+                question: "Polimorfizm (ko‘rinishlilik) degani nimani anglatadi?",
+                options: [
+                    "Bir xil nomli metodning turli klasslarda turlicha ishlashi.",
+                    "Bir klassda ko‘plab metodlar bo‘lishi.",
+                    "Kodni qisqartirish.",
+                    "Obyektlarni ko‘paytirish."
+                ],
+                correct: 0
+            },
+            {
+                topic: "Magic metodlar",
+                question: "`__str__` magic metodi qaysi funksiyani bajaradi?",
+                options: [
+                    "Obyektni qo‘shish (+) vaqtida.",
+                    "Obyektni matn ko‘rinishida (string) qaytarish uchun (masalan, print(obj)).",
+                    "Obyektni uzunligini o‘lchash uchun.",
+                    "Obyektni solishtirish uchun."
+                ],
+                correct: 1
+            },
+            // 5. Modullar
+            {
+                topic: "Modullar",
+                question: "Python da modul nima?",
+                options: [
+                    "Bu maxsus ma'lumotlar bazasi.",
+                    "Bu Python kodini o‘z ichiga olgan fayl (.py kengaytmasiga ega).",
+                    "Bu grafik interfeys elementi.",
+                    "Bu brauzer dasturi."
+                ],
+                correct: 1
+            },
+            // 6. Telegram bot nima
+            {
+                topic: "Telegram bot",
+                question: "Telegram bot nima?",
+                options: [
+                    "Telegram'dagi inson foydalanuvchi.",
+                    "Telegram API orqali avtomatik vazifalarni bajaruvchi maxsus dastur (hisoblar).",
+                    "Telegram ilovasining yangi versiyasi.",
+                    "Xakerlar tomonidan yaratilgan virus."
+                ],
+                correct: 1
+            },
+            // 7. Telegram botlarning qo‘llanish sohasi
+            {
+                topic: "Telegram bot",
+                question: "Telegram botlardan quyidagilardan qaysi birida foydalanish mumkin emas?",
+                options: [
+                    "Avtomatlashtirilgan xizmatlar (masalan, ob-havo, yangiliklar).",
+                    "Guruhlarni boshqarish va moderatsiya.",
+                    "Telegram serverlarini jismoniy ta'mirlash.",
+                    "E-do'konlar va to'lov tizimlari."
+                ],
+                correct: 2
+            },
+            // 8. Telegram Bot API
+            {
+                topic: "Telegram Bot API",
+                question: "Bot API orqali bot nima qila oladi?",
+                options: [
+                    "Foydalanuvchining telefoniga qo‘ng‘iroq qilish.",
+                    "Xabarlar yuborish, qabul qilish, tugmalar (keyboard) yaratish va fayllar bilan ishlash.",
+                    "Foydalanuvchining parolini o‘g‘irlash.",
+                    "Kompyuterni o‘chirib yuborish."
+                ],
+                correct: 1
+            },
+            // 9. Telegram Bot yaratish
+            {
+                topic: "Bot yaratish",
+                question: "Yangi bot yaratish uchun Telegram'da qaysi bot murojaat qilinadi?",
+                options: [
+                    "@GmailBot",
+                    "@BotFather",
+                    "@AdminBot",
+                    "@CreateBot"
+                ],
+                correct: 1
+            },
+            // 10. Kutubxonalar
+            {
+                topic: "Kutubxonalar",
+                question: "Python da telegram bot yaratish uchun eng mashhur kutubxona qaysi?",
+                options: [
+                    "requests",
+                    "pandas",
+                    "python-telegram-bot yoki aiogram",
+                    "django"
+                ],
+                correct: 2
+            },
+            // 11. Ma'lumotlar bazasiga kirish
+            {
+                topic: "Ma'lumotlar bazasi",
+                question: "SQL (Structured Query Language) nima uchun xizmat qiladi?",
+                options: [
+                    "Dasturlash tillarini yozish uchun.",
+                    "Ma'lumotlar bazasi bilan ishlash (ma'lumot qo‘shish, o‘chirish, yangilash) uchun so‘rovlar tili.",
+                    "Veb-sahifalarni dizayn qilish uchun.",
+                    "Rasmlarni tahrirlash uchun."
+                ],
+                correct: 1
+            }
+        ];
+
+        // O'yin holati (State)
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+
+        // Elementlarni olish
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const nextBtn = document.getElementById('next-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const questionCount = document.getElementById('question-count');
+        const topicBadge = document.getElementById('topic-badge');
+
+        // Testni boshlash
+        function startQuiz() {
+            startScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            quizScreen.classList.add('fade-in');
+            
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            
+            loadQuestion();
+        }
+
+        // Savolni yuklash
+        function loadQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            
+            // UI yangilash
+            questionText.innerText = currentQuestion.question;
+            topicBadge.innerText = "Mavzu: " + currentQuestion.topic;
+            questionCount.innerText = `Savol: ${currentQuestionIndex + 1} / ${questions.length}`;
+            
+            // Progress bar
+            const progress = ((currentQuestionIndex) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Variantlarni tozalash va yaratish
+            optionsContainer.innerHTML = '';
+            
+            currentQuestion.options.forEach((option, index) => {
+                const optionCard = document.createElement('div');
+                optionCard.className = 'option-card';
+                optionCard.onclick = () => selectOption(index, optionCard);
+                
+                const indicator = document.createElement('div');
+                indicator.className = 'option-indicator';
+                indicator.innerText = String.fromCharCode(65 + index); // A, B, C, D...
+                
+                const text = document.createElement('span');
+                text.innerText = option;
+                
+                optionCard.appendChild(indicator);
+                optionCard.appendChild(text);
+                optionsContainer.appendChild(optionCard);
+            });
+
+            nextBtn.disabled = true;
+            nextBtn.innerText = currentQuestionIndex === questions.length - 1 ? "Natijalarni Ko‘rish" : "Keyingi savol";
+        }
+
+        // Variantni tanlash
+        function selectOption(selectedIndex, cardElement) {
+            // Oldingi tanlovlarni bekor qilish (vizual)
+            const allOptions = document.querySelectorAll('.option-card');
+            allOptions.forEach(opt => opt.classList.remove('selected'));
+            
+            // Tanlanganni belgilash
+            cardElement.classList.add('selected');
+            
+            // Javobni saqlash
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            nextBtn.disabled = false;
+        }
+
+        // Keyingi savolga o'tish
+        function nextQuestion() {
+            // Javobni tekshirish
+            const currentQuestion = questions[currentQuestionIndex];
+            const selectedAnswer = userAnswers[currentQuestionIndex];
+            
+            if (selectedAnswer === currentQuestion.correct) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                // Savol tugaguncha davom etadi
+                // Yaqinlashuv animatsiyasi uchun qisqa pauza
+                quizScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadQuestion();
+                    quizScreen.style.opacity = '1';
+                }, 200);
+            } else {
+                // Test tugadi
+                progressBar.style.width = '100%';
+                showResults();
+            }
+        }
+
+        // Natijalarni ko‘rsatish
+        function showResults() {
+            quizScreen.style.display = 'none';
+            resultScreen.style.display = 'flex';
+            resultScreen.classList.add('fade-in');
+
+            const percentage = Math.round((score / questions.length) * 100);
+            const finalScore = Math.round((score / questions.length) * 100);
+
+            // Elementlarni yangilash
+            document.getElementById('final-score').innerText = finalScore;
+            document.getElementById('stat-correct').innerText = score;
+            document.getElementById('stat-wrong').innerText = questions.length - score;
+            document.getElementById('stat-percent').innerText = percentage + '%';
+            
+            // Konus rangini yangilash (conic-gradient)
+            const circle = document.getElementById('score-circle');
+            circle.style.background = `conic-gradient(var(--primary-color) ${percentage}%, #334155 ${percentage}% 100%)`;
+
+            // Xabarni belgilash
+            const messageEl = document.getElementById('result-message');
+            const detailsEl = document.getElementById('result-details');
+
+            if (percentage === 100) {
+                messageEl.innerText = "Mukammal!";
+                messageEl.style.color = "var(--success-color)";
+                detailsEl.innerText = "Siz barcha mavzularni (OOP, Botlar, MB) mukammal egallagansiz!";
+            } else if (percentage >= 80) {
+                messageEl.innerText = "Juda yaxshi!";
+                messageEl.style.color = "var(--primary-color)";
+                detailsEl.innerText = "Sizda kuchli asoslar bor, ozgina takrorlash kifoya.";
+            } else if (percentage >= 50) {
+                messageEl.innerText = "Yaxshi, lekin...";
+                messageEl.style.color = "var(--warning-color)";
+                detailsEl.innerText = "Ba'zi mavzularni qayta ko‘rib chiqish kerak bo‘lishi mumkin.";
+            } else {
+                messageEl.innerText = "Yana harakat qiling!";
+                messageEl.style.color = "var(--error-color)";
+                detailsEl.innerText = "Hamma narsani boshidan o‘rganish tavsiya etiladi.";
+            }
+        }
+
+        // Qayta boshlash
+        function restartQuiz() {
+            resultScreen.style.display = 'none';
+            startScreen.style.display = 'flex';
+            startScreen.classList.add('fade-in');
+        }
+    </script>
+</body>
+</html>
