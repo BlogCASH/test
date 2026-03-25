@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python Dasturchilik Testi (Dark Mode)</title>
+    <title>Python Dasturchilik Testi (30 Savol)</title>
     <style>
         /* Ranglar o'zgaruvchilari (Dark Theme) */
         :root {
@@ -398,16 +398,16 @@
 
     <header>
         <h1>Python Master</h1>
-        <p class="subtitle">OOP, Telegram Botlar va Ma'lumotlar Bazasi Testi</p>
+        <p class="subtitle">OOP, Telegram Botlar, MB va 30 ta Murakkab Savol</p>
     </header>
 
     <main class="container">
         <!-- Start Screen -->
         <section id="start-screen" class="start-screen">
-            <div class="start-icon">🤖</div>
+            <div class="start-icon">🐍</div>
             <h2 style="font-size: 1.8rem; margin-bottom: 15px;">Bilimlaringizni sinang!</h2>
             <p style="color: var(--secondary-text); line-height: 1.6; max-width: 500px;">
-                Python dasturlash tilidagi OOP asoslari, Telegram bot yaratish va ma'lumotlar bazalari bo‘yicha 15 ta savol.
+                Python dasturlash tilidagi OOP chuqur bilimlari, Telegram bot yaratish (Aiogram/PTB) va ma'lumotlar bazalari (SQL) bo‘yicha 30 ta savol.
             </p>
             <button class="btn" onclick="startQuiz()">Testni Boshlash</button>
         </section>
@@ -420,7 +420,7 @@
             
             <div class="question-meta">
                 <span id="topic-badge" class="topic-badge">Mavzu: OOP</span>
-                <span id="question-count" class="question-count">Savol: 1 / 15</span>
+                <span id="question-count" class="question-count">Savol: 1 / 30</span>
             </div>
 
             <h3 id="question-text" class="question-text">Savol matni shu yerga keladi?</h3>
@@ -466,13 +466,13 @@
     </main>
 
     <footer>
-        <p>&copy; 2023 Python Quiz Dark Edition. Barcha huquqlar himoyalangan.</p>
+        <p>&copy; 2023 Python Quiz Pro Edition. Barcha huquqlar himoyalangan.</p>
     </footer>
 
     <script>
-        // Test ma'lumotlari (Savollar va javoblar)
+        // Test ma'lumotlari (30 Savol)
         const questions = [
-            // 1. OOPga kirish
+            // OOP Asoslari
             {
                 topic: "OOPga kirish",
                 question: "Python da OOP nima degani tushuniladi va obyekt (object) nima?",
@@ -495,13 +495,13 @@
                 ],
                 correct: 2
             },
-            // 2. Inkapsulyatsiya
+            // Inkapsulyatsiya
             {
                 topic: "Inkapsulyatsiya",
                 question: "Python da o‘zgaruvchini 'private' (xususiy) qilish uchun qanday belgi ishlatiladi?",
                 options: [
                     "# (hash)",
-                    "_ (pastki chiziq)",
+                    "_ (bitta pastki chiziq)",
                     "__ (ikki pastki chiziq)",
                     "* (yulduzcha)"
                 ],
@@ -518,14 +518,25 @@
                 ],
                 correct: 1
             },
-            // 3. Merosxo‘rlik
+            {
+                topic: "Inkapsulyatsiya",
+                question: "`@setter` dekoratori qanday ishlaydi?",
+                options: [
+                    "Obyekt yaratilganda avtomatik ishga tushadi.",
+                    "Xususiy o‘zgaruvchiga qiymat berishni nazorat qilish uchun @property bilan birga ishlaydi.",
+                    "Obyektni stringga aylantiradi.",
+                    "Obyekt o‘chirilganda ishlaydi."
+                ],
+                correct: 1
+            },
+            // Merosxo‘rlik
             {
                 topic: "Merosxo‘rlik",
                 question: "Merosxo‘rlik (Inheritance) nima?",
                 options: [
                     "Bir klassning xususiyatlarini va usullarini boshqa klassga o‘tkazish jarayoni.",
                     "Obyektning ichidagi ma'lumotlarni yashirish.",
-                    "Kodni反复 qayta yozish.",
+                    "Kodni qayta yozish.",
                     "Funksiyalarni o‘zaro bog‘lash."
                 ],
                 correct: 0
@@ -541,7 +552,29 @@
                 ],
                 correct: 0
             },
-            // 4. Polimorfizm va Abstraksiya
+            {
+                topic: "Merosxo‘rlik",
+                question: "Ko‘p darajali merosxo‘rlik (Multilevel Inheritance) nima?",
+                options: [
+                    "Bir nechta ota klasslardan meros olish.",
+                    "A -> B -> B dan C, shunday ketma-ket meros olish.",
+                    "Faqat bitta klassdan meros olish.",
+                    "Hech qanday klassdan meros olinmaydi."
+                ],
+                correct: 1
+            },
+            {
+                topic: "Merosxo‘rlik",
+                question: "Ko‘p merosxo‘rlik (Multiple Inheritance) nima?",
+                options: [
+                    "Bitta klass bir nechta ota klasslardan meros oladi.",
+                    "Bir nechta klass bitta klassdan meros oladi.",
+                    "Obyekt bir nechta klassdan yaratiladi.",
+                    "Merosxo‘rlik umuman yo‘q."
+                ],
+                correct: 0
+            },
+            // Polimorfizm
             {
                 topic: "Polimorfizm",
                 question: "Polimorfizm (ko‘rinishlilik) degani nimani anglatadi?",
@@ -554,6 +587,29 @@
                 correct: 0
             },
             {
+                topic: "Polimorfizm",
+                question: "Operator Overloading nima?",
+                options: [
+                    "Operatorlarni o‘chirish.",
+                    "Operatorlarni (+, -, *) o‘zimiz yaratgan klass obyektlari uchun qayta ta’riflash.",
+                    "Yangi operator yaratish.",
+                    "Funksiyalarni operator qilish."
+                ],
+                correct: 1
+            },
+            // Abstraksiya va Magic metodlar
+            {
+                topic: "Abstraksiya",
+                question: "Abstrakt klass (Abstract Class) nima?",
+                options: [
+                    "To‘liq ishlaydigan klass.",
+                    "Ob'yekt yaratib bo‘lmaydigan va faqat meros olish uchun mo‘ljallangan klass (o‘zida abstrakt metodlarga ega).",
+                    "Faqat o‘zgaruvchilarga ega klass.",
+                    "HTML shabloni."
+                ],
+                correct: 1
+            },
+            {
                 topic: "Magic metodlar",
                 question: "`__str__` magic metodi qaysi funksiyani bajaradi?",
                 options: [
@@ -564,7 +620,29 @@
                 ],
                 correct: 1
             },
-            // 5. Modullar
+            {
+                topic: "Magic metodlar",
+                question: "`__add__` metodi qachon ishga tushadi?",
+                options: [
+                    "Obyektni o‘qiganda.",
+                    "Obyektni '+' operatori yordamida qo‘shganda.",
+                    "Obyektni chop etganda.",
+                    "Obyekt yaratilganda."
+                ],
+                correct: 1
+            },
+            {
+                topic: "Magic metodlar",
+                question: "`__len__` metodi qaysi funksiyani bajaradi?",
+                options: [
+                    "len() funksiyasi chaqirilganda ishlaydi (obyekt uzunligi).",
+                    "Obyekt ichidagi elementlarni o‘chiradi.",
+                    "Obyektni stringga aylantiradi.",
+                    "Obyektni nusxalaydi."
+                ],
+                correct: 0
+            },
+            // Modullar
             {
                 topic: "Modullar",
                 question: "Python da modul nima?",
@@ -576,19 +654,29 @@
                 ],
                 correct: 1
             },
-            // 6. Telegram bot nima
+            {
+                topic: "Modullar",
+                question: "`__name__` o‘zgaruvchisi qanday ahamiyatga ega?",
+                options: [
+                    "Fayl nomini saqlaydi.",
+                    "Agar fayl to‘g‘ridan-to‘g‘ri ishga tushirilsa '__main__', import qilinsa modul nomini qaytaradi.",
+                    "Fayl hajmini ko‘rsatadi.",
+                    "Hech qanday ahamiyati yo‘q."
+                ],
+                correct: 1
+            },
+            // Telegram Bot (Asoslar)
             {
                 topic: "Telegram bot",
                 question: "Telegram bot nima?",
                 options: [
                     "Telegram'dagi inson foydalanuvchi.",
-                    "Telegram API orqali avtomatik vazifalarni bajaruvchi maxsus dastur (hisoblar).",
+                    "Telegram API orqali avtomatik vazifalarni bajaruvchi maxsus dastur.",
                     "Telegram ilovasining yangi versiyasi.",
                     "Xakerlar tomonidan yaratilgan virus."
                 ],
                 correct: 1
             },
-            // 7. Telegram botlarning qo‘llanish sohasi
             {
                 topic: "Telegram bot",
                 question: "Telegram botlardan quyidagilardan qaysi birida foydalanish mumkin emas?",
@@ -600,7 +688,7 @@
                 ],
                 correct: 2
             },
-            // 8. Telegram Bot API
+            // Telegram Bot API
             {
                 topic: "Telegram Bot API",
                 question: "Bot API orqali bot nima qila oladi?",
@@ -612,7 +700,18 @@
                 ],
                 correct: 1
             },
-            // 9. Telegram Bot yaratish
+            {
+                topic: "Telegram Bot API",
+                question: "Polling (So‘rov) usuli nima?",
+                options: [
+                    "Serverning o‘zi botga murojaat qiladi.",
+                    "Bot har daqiqada Telegram serverlariga yangi xabar bor-yo‘qligini so‘rab turadi.",
+                    "Bot faqat administratorlarga xabar yuboradi.",
+                    "Bot nafaqat ishlaydi."
+                ],
+                correct: 1
+            },
+            // Bot yaratish
             {
                 topic: "Bot yaratish",
                 question: "Yangi bot yaratish uchun Telegram'da qaysi bot murojaat qilinadi?",
@@ -624,19 +723,41 @@
                 ],
                 correct: 1
             },
-            // 10. Kutubxonalar
+            // Kutubxonalar
             {
                 topic: "Kutubxonalar",
-                question: "Python da telegram bot yaratish uchun eng mashhur kutubxona qaysi?",
+                question: "Python da telegram bot yaratish uchun eng mashhur asinxron kutubxona qaysi?",
                 options: [
                     "requests",
                     "pandas",
-                    "python-telegram-bot yoki aiogram",
-                    "django"
+                    "aiogram",
+                    "flask"
                 ],
                 correct: 2
             },
-            // 11. Ma'lumotlar bazasiga kirish
+            {
+                topic: "Kutubxonalar",
+                question: "`python-telegram-bot` kutubxonasining asosiy afzalligi nima?",
+                options: [
+                    "Faqat sinxron ishlashi.",
+                    "Ob'ekt yo'naltirilgan dasturlash (OOP) yondashuvi va qulay API.",
+                    "Juda sekin ishlashi.",
+                    "Faqat Linux'da ishlashi."
+                ],
+                correct: 1
+            },
+            {
+                topic: "Kutubxonalar",
+                question: "Botda 'Handler' nima?",
+                options: [
+                    "Botning nomi.",
+                    "Kelayotgan xabarlar (Update)ni qabul qilib, mos funksiyani ishga tushiruvchi qism.",
+                    "Botning tokeni.",
+                    "Botning rasmli profil rasmi."
+                ],
+                correct: 1
+            },
+            // Ma'lumotlar Bazasi (SQL)
             {
                 topic: "Ma'lumotlar bazasi",
                 question: "SQL (Structured Query Language) nima uchun xizmat qiladi?",
@@ -645,6 +766,50 @@
                     "Ma'lumotlar bazasi bilan ishlash (ma'lumot qo‘shish, o‘chirish, yangilash) uchun so‘rovlar tili.",
                     "Veb-sahifalarni dizayn qilish uchun.",
                     "Rasmlarni tahrirlash uchun."
+                ],
+                correct: 1
+            },
+            {
+                topic: "Ma'lumotlar bazasi",
+                question: "Python da SQL bilan ishlash uchun qaysi standart kutubxona ishlatiladi?",
+                options: [
+                    "sqlite3",
+                    "random",
+                    "math",
+                    "csv"
+                ],
+                correct: 0
+            },
+            {
+                topic: "Ma'lumotlar bazasi",
+                question: "`SELECT * FROM users` so‘rovi nima qiladi?",
+                options: [
+                    "Users jadvalini o‘chiradi.",
+                    "Users jadvalidagi barcha ma'lumotlarni tanlaydi (oladi).",
+                    "Yangi foydalanuvchi qo‘shadi.",
+                    "Jadvalni yaratadi."
+                ],
+                correct: 1
+            },
+            {
+                topic: "Ma'lumotlar bazasi",
+                question: "SQL da `PRIMARY KEY` nima?",
+                options: [
+                    "Jadval nomi.",
+                    "Har qanday qatorda noyob bo‘lgan, qatorlarni aniqlash uchun ishlatiladigan maydon.",
+                    "Ma'lumotlar turi.",
+                    "Tashqi kalit."
+                ],
+                correct: 1
+            },
+            {
+                topic: "Ma'lumotlar bazasi",
+                question: "SQL Injection xavfi nima?",
+                options: [
+                    "Ma'lumotlar bazasiga virus tushishi.",
+                    "Foydalanuvchi kiritgan ma'lumotlar orqali so‘rovni buzib, ruxsatsiz ma'lumotlarga kirish.",
+                    "Internet sekinlashishi.",
+                    "Botning ishdan to‘xtashi."
                 ],
                 correct: 1
             }
@@ -714,7 +879,12 @@
             });
 
             nextBtn.disabled = true;
-            nextBtn.innerText = currentQuestionIndex === questions.length - 1 ? "Natijalarni Ko‘rish" : "Keyingi savol";
+            // Tugma matnini oxirgi savol uchun o'zgartiramiz
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.innerText = "Natijalarni Ko‘rish";
+            } else {
+                nextBtn.innerText = "Keyingi savol";
+            }
         }
 
         // Variantni tanlash
@@ -784,7 +954,7 @@
             if (percentage === 100) {
                 messageEl.innerText = "Mukammal!";
                 messageEl.style.color = "var(--success-color)";
-                detailsEl.innerText = "Siz barcha mavzularni (OOP, Botlar, MB) mukammal egallagansiz!";
+                detailsEl.innerText = "Siz barcha 30 ta savolni to‘g‘ri javob berdingiz. Haqiqiy Python Master!";
             } else if (percentage >= 80) {
                 messageEl.innerText = "Juda yaxshi!";
                 messageEl.style.color = "var(--primary-color)";
