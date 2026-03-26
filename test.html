@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python Neon Quiz</title>
+    <title>Python Ultimate Cyber Quiz</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
 
         :root {
-            --primary-neon: #00f3ff; /* Cyan neon */
-            --secondary-neon: #bc13fe; /* Purple neon */
+            --primary-neon: #00f3ff; /* Cyan */
+            --secondary-neon: #bc13fe; /* Purple */
+            --success-color: #00ff9d; /* Green */
+            --error-color: #ff0055; /* Red */
             --bg-color: #050510;
             --glass-bg: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-color: #ffffff;
             --text-muted: #a0a0b0;
-            --success: #00ff9d;
-            --error: #ff0055;
         }
 
         * {
@@ -37,77 +37,60 @@
             position: relative;
         }
 
-        /* Animated Background */
+        /* Background Animation */
         .bg-blob {
             position: absolute;
             border-radius: 50%;
             filter: blur(80px);
             z-index: -1;
-            opacity: 0.6;
-            animation: floatBlob 10s infinite alternate;
+            opacity: 0.5;
+            animation: floatBlob 15s infinite alternate;
         }
 
-        .blob-1 {
-            width: 400px;
-            height: 400px;
-            background: var(--primary-neon);
-            top: -100px;
-            left: -100px;
-        }
-
-        .blob-2 {
-            width: 500px;
-            height: 500px;
-            background: var(--secondary-neon);
-            bottom: -150px;
-            right: -150px;
-            animation-delay: -5s;
-        }
+        .blob-1 { width: 500px; height: 500px; background: var(--primary-neon); top: -100px; left: -100px; }
+        .blob-2 { width: 600px; height: 600px; background: var(--secondary-neon); bottom: -150px; right: -150px; animation-delay: -5s; }
 
         @keyframes floatBlob {
             0% { transform: translate(0, 0) scale(1); }
             100% { transform: translate(30px, 50px) scale(1.1); }
         }
 
-        /* Main Glass Container */
+        /* Main Container */
         .app-container {
             width: 90%;
-            max-width: 750px;
+            max-width: 800px;
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
             padding: 40px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.5);
             position: relative;
             overflow: hidden;
-            min-height: 600px;
+            min-height: 650px;
             display: flex;
             flex-direction: column;
+            transition: height 0.3s ease;
         }
 
         /* Header */
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 20px;
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
             background: linear-gradient(to right, var(--primary-neon), var(--secondary-neon));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1.1rem;
+            margin-bottom: 5px;
         }
 
         /* Screens */
@@ -118,36 +101,24 @@
             animation: fadeIn 0.5s ease forwards;
         }
 
-        .screen.active {
-            display: flex;
-        }
+        .screen.active { display: flex; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Start Screen */
-        .start-content {
+        /* Timer */
+        .timer-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--text-color);
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            gap: 20px;
+            margin-bottom: 20px;
+            font-variant-numeric: tabular-nums;
         }
-
-        .big-icon {
-            font-size: 6rem;
-            filter: drop-shadow(0 0 15px var(--primary-neon));
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
+        .timer-display.warning { color: var(--error-color); animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         /* Buttons */
         .btn-neon {
@@ -162,11 +133,10 @@
             transition: all 0.3s ease;
             box-shadow: 0 0 15px var(--primary-neon);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 30px;
+            margin-top: 20px;
         }
 
-        .btn-neon:hover {
+        .btn-neon:hover:not(:disabled) {
             background: #fff;
             box-shadow: 0 0 30px var(--primary-neon);
             transform: scale(1.05);
@@ -177,27 +147,27 @@
             color: var(--text-muted);
             box-shadow: none;
             cursor: not-allowed;
-            transform: none;
         }
 
-        /* Quiz Layout */
+        /* Quiz Header */
         .quiz-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             font-size: 0.9rem;
             color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            background: rgba(0,0,0,0.2);
+            padding: 10px 15px;
+            border-radius: 12px;
         }
 
         .progress-track {
             flex-grow: 1;
-            height: 4px;
+            height: 6px;
             background: rgba(255,255,255,0.1);
-            margin: 0 20px;
-            border-radius: 2px;
+            margin: 0 15px;
+            border-radius: 3px;
             overflow: hidden;
         }
 
@@ -209,152 +179,122 @@
             box-shadow: 0 0 10px var(--primary-neon);
         }
 
-        .question-text {
-            font-size: 1.6rem;
-            margin-bottom: 30px;
-            line-height: 1.4;
-            font-weight: 600;
-        }
+        .question-text { font-size: 1.5rem; margin-bottom: 25px; font-weight: 600; line-height: 1.4; }
 
         /* Options */
-        .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
 
         .option-btn {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
-            padding: 18px 24px;
-            border-radius: 16px;
+            padding: 16px 20px;
+            border-radius: 14px;
             color: var(--text-color);
             text-align: left;
-            font-size: 1.1rem;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .option-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
+        .option-btn:hover:not(.selected) {
+            background: rgba(255, 255, 255, 0.08);
             border-color: var(--primary-neon);
-            transform: translateX(10px);
         }
 
         .option-btn.selected {
-            background: rgba(0, 243, 255, 0.1);
+            background: rgba(0, 243, 255, 0.15);
             border-color: var(--primary-neon);
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
         }
 
         .option-btn.selected::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 5px;
-            background: var(--primary-neon);
+            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 5px; background: var(--primary-neon);
         }
 
-        /* Result Screen */
-        .result-content {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-        }
-
-        .score-display {
-            font-size: 5rem;
-            font-weight: 800;
-            color: var(--primary-neon);
-            text-shadow: 0 0 30px var(--primary-neon);
-            margin-bottom: 10px;
-        }
-
-        .score-label {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-        }
-
-        .stats-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-item {
-            background: rgba(255,255,255,0.05);
-            padding: 15px 25px;
-            border-radius: 12px;
+        /* Result Details Table */
+        .result-details {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            width: 100%;
             border: 1px solid var(--glass-border);
-            text-align: center;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.2);
         }
 
-        .stat-num {
-            font-size: 1.5rem;
-            font-weight: bold;
-            display: block;
+        .review-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.9rem;
         }
+        .review-item:last-child { border-bottom: none; }
+        .review-item.correct { border-left: 4px solid var(--success-color); }
+        .review-item.wrong { border-left: 4px solid var(--error-color); background: rgba(255, 0, 85, 0.05); }
 
-        .stat-desc {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
+        .q-number { font-weight: bold; color: var(--text-muted); margin-bottom: 4px; display: block; }
+        .ans-label { font-size: 0.8rem; text-transform: uppercase; margin-top: 5px; display: block; }
+        .ans-text { color: var(--text-color); }
+        .ans-text.your-ans-wrong { color: var(--error-color); text-decoration: line-through; }
+        .ans-text.correct-ans { color: var(--success-color); }
+
+        /* Stats */
+        .stats-row {
+            display: flex; gap: 15px; margin-bottom: 20px; justify-content: center;
         }
-
-        .feedback-msg {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            font-weight: bold;
+        .stat-box {
+            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; text-align: center; min-width: 80px; border: 1px solid var(--glass-border);
         }
+        .stat-val { font-size: 1.5rem; font-weight: bold; display: block; }
+        .stat-lbl { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
 
-        /* Responsive */
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-neon); }
+
         @media (max-width: 600px) {
-            h1 { font-size: 2rem; }
-            .app-container { padding: 25px; width: 95%; min-height: 100vh; border-radius: 0; border: none; }
-            .stats-row { flex-direction: column; width: 100%; gap: 10px; }
-            .stat-item { width: 100%; }
-            .option-btn { padding: 15px; font-size: 1rem; }
+            .app-container { padding: 20px; height: 100vh; border-radius: 0; border: none; width: 100%; }
+            h1 { font-size: 1.8rem; }
+            .stats-row { flex-wrap: wrap; }
+            .stat-box { flex: 1 1 40%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Background Blobs -->
     <div class="bg-blob blob-1"></div>
     <div class="bg-blob blob-2"></div>
 
     <div class="app-container">
         <header>
-            <h1>Python Cyber</h1>
-            <p class="subtitle">OOP • Bots • Databases</p>
+            <h1>Python Cyber 40</h1>
+            <p style="color: var(--text-muted);">Ultimate Challenge: 40 Savol • 40 Daqiqa</p>
         </header>
 
         <!-- Start Screen -->
-        <div id="start-screen" class="screen active start-content">
-            <div class="big-icon">💠</div>
-            <h2 style="font-size: 2rem;">Tizimni sinang</h2>
-            <p style="color: var(--text-muted); max-width: 400px; line-height: 1.6;">
-                Python dasturlash bo‘yicha 30 ta murakkab savol. OOP asoslari, Telegram botlar va SQL ma'lumotlar bazalari.
+        <div id="start-screen" class="screen active" style="justify-content: center; align-items: center; text-align: center;">
+            <div style="font-size: 5rem; margin-bottom: 20px; filter: drop-shadow(0 0 20px var(--primary-neon));">⚡</div>
+            <h2 style="font-size: 2rem; margin-bottom: 15px;">Tayyormisiz?</h2>
+            <p style="color: var(--text-muted); max-width: 500px; line-height: 1.6; margin-bottom: 30px;">
+                Sizni 40 ta murakkab savol kutmoqda. Vaqtingiz 40 daqiqa. 
+                OOP, Telegram Bots, SQL va Python Advanced mavzularida bilimingizni sinang.
             </p>
-            <button class="btn-neon" onclick="startQuiz()">Start</button>
+            <button class="btn-neon" onclick="startQuiz()">Testni Boshlash</button>
         </div>
 
         <!-- Quiz Screen -->
         <div id="quiz-screen" class="screen">
+            <div class="timer-display" id="timer">40:00</div>
+
             <div class="quiz-header">
                 <span id="topic-badge">OOP</span>
                 <div class="progress-track">
                     <div id="progress-bar" class="progress-fill"></div>
                 </div>
-                <span id="question-counter">1/30</span>
+                <span id="question-counter">1/40</span>
             </div>
 
             <h3 id="question-text" class="question-text">Savol yuklanmoqda...</h3>
@@ -364,95 +304,146 @@
             </div>
 
             <div style="margin-top: auto; text-align: right;">
-                <button id="next-btn" class="btn-neon" onclick="nextQuestion()" disabled style="font-size: 1rem; padding: 12px 30px; margin-top: 20px;">Keyingi</button>
+                <button id="next-btn" class="btn-neon" onclick="nextQuestion()" disabled style="font-size: 1rem; padding: 12px 30px;">Keyingi</button>
             </div>
         </div>
 
         <!-- Result Screen -->
-        <div id="result-screen" class="screen result-content">
-            <div class="score-display" id="final-score">0</div>
-            <div class="score-label">Topilgan Ball</div>
-            
-            <h2 class="feedback-msg" id="feedback-msg">Yaxshi</h2>
-            <p id="feedback-detail" style="color: var(--text-muted); margin-bottom: 30px; max-width: 500px;">
-                Natijangiz.
-            </p>
+        <div id="result-screen" class="screen">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2 id="result-title" style="font-size: 2rem; margin-bottom: 10px;">Natija</h2>
+                <div style="font-size: 3rem; font-weight: 800; color: var(--primary-neon);" id="final-score">0</div>
+                <div style="color: var(--text-muted);">Jami ball</div>
+            </div>
 
             <div class="stats-row">
-                <div class="stat-item">
-                    <span class="stat-num" id="correct-count" style="color: var(--success)">0</span>
-                    <span class="stat-desc">To'g'ri</span>
+                <div class="stat-box">
+                    <span class="stat-val" style="color: var(--success-color)" id="correct-count">0</span>
+                    <span class="stat-lbl">To'g'ri</span>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-num" id="wrong-count" style="color: var(--error)">0</span>
-                    <span class="stat-desc">Noto'g'ri</span>
+                <div class="stat-box">
+                    <span class="stat-val" style="color: var(--error-color)" id="wrong-count">0</span>
+                    <span class="stat-lbl">Xato</span>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-num" id="percent-count">0%</span>
-                    <span class="stat-desc">Foiz</span>
+                <div class="stat-box">
+                    <span class="stat-val" id="percent-count">0%</span>
+                    <span class="stat-lbl">Foiz</span>
                 </div>
             </div>
 
-            <button class="btn-neon" onclick="restartQuiz()">Qayta boshlash</button>
+            <h3 style="margin-bottom: 10px; font-size: 1.1rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 5px;">
+                Tahlil (Xatolar va To'g'ri javoblar)
+            </h3>
+            
+            <div id="review-list" class="result-details">
+                <!-- Detailed results injected here -->
+            </div>
+
+            <button class="btn-neon" onclick="restartQuiz()">Qayta Boshlash</button>
         </div>
     </div>
 
     <script>
+        // 40 Ta Savol Ma'lumotlari
         const questions = [
-            // OOP
-            { topic: "OOP", q: "Python da obyekt nima?", options: ["Kod satrlari", "Klassdan yaratilgan nusxa (instance)", "Funktsiya to‘plami", "O‘zgaruvchi"], a: 1 },
-            { topic: "OOP", q: "`__init__` metodi nima qiladi?", options: ["Dasturni o‘chiradi", "Obyekt yaratilganda xususiyatlarni boshlaydi", "Matn chop etadi", "Hisoblaydi"], a: 1 },
-            { topic: "Inkapsulyatsiya", q: "O‘zgaruvchini 'private' qilish uchun qanday prefiks ishlatiladi?", options: ["#", "_", "__", "*"], a: 2 },
-            { topic: "Inkapsulyatsiya", q: "`@property` dekoratori nima uchun kerak?", options: ["O‘chirish uchun", "Getter funksiyasini atribut kabi ishlatish uchun", "Yaratish uchun", "Sekinlashtirish uchun"], a: 1 },
-            { topic: "Merosxo‘rlik", q: "Inheritance nima?", options: ["Ota klass xususiyatlarini o‘g‘il klassga o‘tkazish", "Yashirish", "Qayta yozish", "Bog‘lash"], a: 0 },
-            { topic: "Merosxo‘rlik", q: "`super()` funksiyasi nimani ifodalaydi?", options: ["O‘g‘il klassni", "Ota klassni metodlarini chaqirishni", "Obyektni", "Global o‘zgaruvchini"], a: 1 },
-            { topic: "Merosxo‘rlik", q: "Ko‘p darajali merosxo‘rlik (Multilevel) degani nimani anglatadi?", options: ["Bir nechta otadan meros olish", "Ketma-ket (A->B->C) meros olish", "Faqat bitta otadan", "Meros yo‘q"], a: 1 },
-            { topic: "Polimorfizm", q: "Polimorfizm nimani bildiradi?", options: ["Ko‘plab klass", "Bir xil nomli metodning turlicha ishlashi", "Kod qisqartirish", "Obyekt ko‘paytirish"], a: 1 },
-            { topic: "Polimorfizm", q: "Operator Overloading nima?", options: ["Operator o‘chirish", "Operatorni (+, -) klass uchun qayta ta’riflash", "Yangi operator", "Funksiyalashtirish"], a: 1 },
-            { topic: "Abstraksiya", q: "Abstrakt klassdan obyekt yaratiladimi?", options: ["Ha", "Yo‘q, faqat meros olish uchun", "Faqat funksiya bilan", "Shart emas"], a: 1 },
-            { topic: "Magic Methods", q: "`__str__` qachon ishlaydi?", options: ["Qo‘shganda", "Print(obj) qilganda", "O‘chirganda", "Solishtirganda"], a: 1 },
-            { topic: "Magic Methods", q: "`__add__` metodi qaysi operator bilan bog‘liq?", options: ["-", "+", "*", "/"], a: 1 },
-            { topic: "Magic Methods", q: "`__len__` metodi qaysi buyruq bilan ishlaydi?", options: ["len()", "str()", "int()", "print()"], a: 0 },
-            { topic: "Modullar", q: "Modul nima?", options: ["DB fayli", ".py kengatmali Python fayli", "Rasm", "Dastur"], a: 1 },
-            { topic: "Modullar", q: "`__name__` == '__main__' nima degani?", options: ["Fayl nomi", "Fayl to‘g‘ridan-to‘g‘ri ishga tushirilgan", "Fayl o‘chirilgan", "Xatolik"], a: 1 },
-            
-            // Telegram Bot
-            { topic: "Telegram Bot", q: "Bot nima?", options: ["Inson foydalanuvchi", "Avtomatik dastur", "Server", "Virus"], a: 1 },
-            { topic: "Telegram Bot", q: "Bot qayerda ishlamaydi?", options: ["Xizmatlarda", "Guruhlarda", "Serverlarni jismoniy ta'mirlashda", "Do'konda"], a: 2 },
-            { topic: "Bot API", q: "Bot API orqali nima qilib bo‘lmaydi?", options: ["Xabar yuborish", "Tugma yasash", "Telefon qo‘ng‘iroq", "Fayl yuborish"], a: 2 },
-            { topic: "Bot API", q: "Polling usuli nima?", options: ["Server botga murojaat qiladi", "Bot serverga so‘rov yuborib turadi", "Foydalanuvchi yozadi", "Admin javob beradi"], a: 1 },
-            { topic: "Yaratish", q: "Bot yaratish uchun qaysi bot kerak?", options: ["@Admin", "@BotFather", "@UserBot", "@Support"], a: 1 },
-            { topic: "Kutubxonalar", q: "Eng mashhur asinxron bot kutubxonasi?", options: ["requests", "pandas", "aiogram", "flask"], a: 2 },
-            { topic: "Kutubxonalar", q: "python-telegram-bot qanday yondashuvda ishlaydi?", options: ["Procedural", "OOP (Object Oriented)", "Functional", "Hybrid"], a: 1 },
-            { topic: "Handler", q: "Handler nima?", options: ["Bot nomi", "Xabarni qabul qilib funksiyani ishga tushiruvchi qism", "Token", "Rasm"], a: 1 },
-            { topic: "Keyboards", q: "ReplyKeyboardMarkup qanday klaviatura?", options: ["O‘rnatiladigan (inline)", "Asosiy ekranda doim turadigan", "Ovozli", "Video"], a: 1 },
-            { topic: "Filters", q: "aiogram da `Command('start')` nima qiladi?", options: ["Barcha xabalarni oladi", "Faqat /start buyrug‘ini tutadi", "Xabarni o‘chiradi", "Botni to‘xtatadi"], a: 1 },
+            // OOP Basics (1-10)
+            { t: "OOP", q: "Python da obyekt nima?", o: ["Kod satrlari", "Klassdan yaratilgan nusxa (instance)", "Funktsiya to‘plami", "O‘zgaruvchi"], a: 1 },
+            { t: "OOP", q: "`__init__` metodi nima qiladi?", o: ["Dasturni o‘chiradi", "Obyekt yaratilganda xususiyatlarni boshlaydi", "Matn chop etadi", "Hisoblaydi"], a: 1 },
+            { t: "Inkapsulyatsiya", q: "O‘zgaruvchini 'private' qilish uchun qanday prefiks ishlatiladi?", o: ["#", "_", "__", "*"], a: 2 },
+            { t: "Inkapsulyatsiya", q: "`@property` dekoratori nima uchun kerak?", o: ["O‘chirish uchun", "Getter funksiyasini atribut kabi ishlatish uchun", "Yaratish uchun", "Sekinlashtirish uchun"], a: 1 },
+            { t: "Merosxo‘rlik", q: "Inheritance nima?", o: ["Ota klass xususiyatlarini o‘g‘il klassga o‘tkazish", "Yashirish", "Qayta yozish", "Bog‘lash"], a: 0 },
+            { t: "Merosxo‘rlik", q: "`super()` funksiyasi nimani ifodalaydi?", o: ["O‘g‘il klassni", "Ota klassni metodlarini chaqirishni", "Obyektni", "Global o‘zgaruvchini"], a: 1 },
+            { t: "Merosxo‘rlik", q: "Ko‘p darajali merosxo‘rlik (Multilevel) degani nimani anglatadi?", o: ["Bir nechta otadan meros olish", "Ketma-ket (A->B->C) meros olish", "Faqat bitta otadan", "Meros yo‘q"], a: 1 },
+            { t: "Polimorfizm", q: "Polimorfizm nimani bildiradi?", o: ["Ko‘plab klass", "Bir xil nomli metodning turlicha ishlashi", "Kod qisqartirish", "Obyekt ko‘paytirish"], a: 1 },
+            { t: "Polimorfizm", q: "Operator Overloading nima?", o: ["Operator o‘chirish", "Operatorni (+, -) klass uchun qayta ta’riflash", "Yangi operator", "Funksiyalashtirish"], a: 1 },
+            { t: "Abstraksiya", q: "Abstrakt klassdan obyekt yaratiladimi?", o: ["Ha", "Yo‘q, faqat meros olish uchun", "Faqat funksiya bilan", "Shart emas"], a: 1 },
 
-            // SQL / Database
-            { topic: "Database", q: "SQL nima?", options: ["Dasturlash tili", "Ma'lumotlar bazasi bilan ishlash tili", "Design tili", "Markap tili"], a: 1 },
-            { topic: "Database", q: "Python da standart SQL kutubxonasi?", options: ["sqlite3", "sql", "pydb", "mysqldb"], a: 0 },
-            { topic: "SQL Query", q: "`SELECT * FROM users` nima qiladi?", options: ["O‘chiradi", "Barcha ma'lumotlarni oladi", "Yangilaydi", "Yaratadi"], a: 1 },
-            { topic: "SQL Keys", q: "`PRIMARY KEY` nima?", options: ["Jadval nomi", "Noyob identifikator", "Ma'lumot turi", "Tashqi kalit"], a: 1 },
-            { topic: "Security", q: "SQL Injection nima?", options: ["Virus", "Kod orqali so‘rovni buzib ma'lumot olish", "Internet tezligi", "Bot xatosi"], a: 1 },
-            { topic: "SQL Join", q: "JOIN so‘rovi nima qiladi?", options: ["Jadvalni o‘chiradi", "Ikki yoki undan ortiq jadvallarni bog‘laydi", "Yangi DB yaratadi", "Faylni yuklaydi"], a: 1 },
-            { topic: "SQL Data", q: "INSERT so‘rovi qanday ishlaydi?", options: ["O'qish (Read)", "Yangi ma'lumot qo'shish (Create)", "O'zgartirish (Update)", "O'chirish (Delete)"], a: 1 },
-            { topic: "SQL Data", q: "UPDATE so‘rovi nimaga xizmat qiladi?", options: ["Ma'lumot o'zgartirish", "Ma'lumot o'chirish", "Ma'lumot qo'shish", "Ma'lumot o'qish"], a: 0 },
-            { topic: "SQLite", q: "SQLite nima?", options: ["Serverli DB", "Serverliksiz, faylga asoslangan yengil DB", "Onlayn xizmat", "Dastur"], a: 1 },
-            { topic: "SQL Aggregation", q: "`COUNT(*)` funksiyasi nima qiladi?", options: ["Yig'indini hisoblaydi", "Qatorlar sonini sanaydi", "O'rtachani topadi", "Maksimumni topadi"], a: 1 }
+            // Magic Methods (11-15)
+            { t: "Magic Methods", q: "`__str__` qachon ishlaydi?", o: ["Qo‘shganda", "Print(obj) qilganda", "O‘chirganda", "Solishtirganda"], a: 1 },
+            { t: "Magic Methods", q: "`__add__` metodi qaysi operator bilan bog‘liq?", o: ["-", "+", "*", "/"], a: 1 },
+            { t: "Magic Methods", q: "`__len__` metodi qaysi buyruq bilan ishlaydi?", o: ["len()", "str()", "int()", "print()"], a: 0 },
+            { t: "Magic Methods", q: "`__call__` metodi qachon ishga tushadi?", o: ["Obyekt yaratilganda", "Obyektni funksiya sifatida chaqirilganda (obj())", "O‘chirilganda", "Stringga aylantirilganda"], a: 1 },
+            { t: "Magic Methods", q: "`__del__` metodi vazifasi?", o: ["Yangilash", "Obyekt xotiradan o‘chirilayotganda (Garbage collector)", "Yaratish", "Chop etish"], a: 1 },
+
+            // Modules & Packages (16-20)
+            { t: "Modullar", q: "Modul nima?", o: ["DB fayli", ".py kengatmali Python fayli", "Rasm", "Dastur"], a: 1 },
+            { t: "Modullar", q: "`__name__` == '__main__' nima degani?", o: ["Fayl nomi", "Fayl to‘g‘ridan-to‘g‘ri ishga tushirilgan", "Fayl o‘chirilgan", "Xatolik"], a: 1 },
+            { t: "Modullar", q: "Pip nima?", o: ["Python dasturi", "Paketlarni o‘rnatish boshqaruvchisi", "Kod tahrirchi", "Server"], a: 1 },
+            { t: "Files", q: "Python da faylni o‘qish uchun qaysi rejim kerak?", o: ["'w'", "'r'", "'a'", "'d'"], a: 1 },
+            { t: "Files", q: "`with open(...)` qanday afzallikka ega?", o: ["Tezroq ishlaydi", "Faylni avtomatik yopadi (resource safe)", "Rangli kod", "Internetdan yuklaydi"], a: 1 },
+
+            // Telegram Bot Basics (21-25)
+            { t: "Telegram Bot", q: "Bot nima?", o: ["Inson foydalanuvchi", "Avtomatik dastur", "Server", "Virus"], a: 1 },
+            { t: "Telegram Bot", q: "Bot qayerda ishlamaydi?", o: ["Xizmatlarda", "Guruhlarda", "Serverlarni jismoniy ta'mirlashda", "Do'konda"], a: 2 },
+            { t: "Bot API", q: "Bot API orqali nima qilib bo‘lmaydi?", o: ["Xabar yuborish", "Tugma yasash", "Telefon qo‘ng‘iroq", "Fayl yuborish"], a: 2 },
+            { t: "Bot API", q: "Polling usuli nima?", o: ["Server botga murojaat qiladi", "Bot serverga so‘rov yuborib turadi", "Foydalanuvchi yozadi", "Admin javob beradi"], a: 1 },
+            { t: "Yaratish", q: "Bot yaratish uchun qaysi bot kerak?", o: ["@Admin", "@BotFather", "@UserBot", "@Support"], a: 1 },
+
+            // Bot Libraries & Advanced (26-30)
+            { t: "Kutubxonalar", q: "Eng mashhur asinxron bot kutubxonasi?", o: ["requests", "pandas", "aiogram", "flask"], a: 2 },
+            { t: "Kutubxonalar", q: "python-telegram-bot qanday yondashuvda ishlaydi?", o: ["Procedural", "OOP (Object Oriented)", "Functional", "Hybrid"], a: 1 },
+            { t: "Handler", q: "Handler nima?", o: ["Bot nomi", "Xabarni qabul qilib funksiyani ishga tushiruvchi qism", "Token", "Rasm"], a: 1 },
+            { t: "Keyboards", q: "ReplyKeyboardMarkup qanday klaviatura?", o: ["O‘rnatiladigan (inline)", "Asosiy ekranda doim turadigan", "Ovozli", "Video"], a: 1 },
+            { t: "Filters", q: "aiogram da `Command('start')` nima qiladi?", o: ["Barcha xabalarni oladi", "Faqat /start buyrug‘ini tutadi", "Xabarni o‘chiradi", "Botni to‘xtatadi"], a: 1 },
+
+            // Database Basics (31-35)
+            { t: "Database", q: "SQL nima?", o: ["Dasturlash tili", "Ma'lumotlar bazasi bilan ishlash tili", "Design tili", "Markap tili"], a: 1 },
+            { t: "Database", q: "Python da standart SQL kutubxonasi?", o: ["sqlite3", "sql", "pydb", "mysqldb"], a: 0 },
+            { t: "SQL Query", q: "`SELECT * FROM users` nima qiladi?", o: ["O‘chiradi", "Barcha ma'lumotlarni oladi", "Yangilaydi", "Yaratadi"], a: 1 },
+            { t: "SQL Keys", q: "`PRIMARY KEY` nima?", o: ["Jadval nomi", "Noyob identifikator", "Ma'lumot turi", "Tashqi kalit"], a: 1 },
+            { t: "Security", q: "SQL Injection nima?", o: ["Virus", "Kod orqali so‘rovni buzib ma'lumot olish", "Internet tezligi", "Bot xatosi"], a: 1 },
+
+            // Database Advanced (36-40)
+            { t: "SQL Join", q: "JOIN so‘rovi nima qiladi?", o: ["Jadvalni o‘chiradi", "Ikki yoki undan ortiq jadvallarni bog‘laydi", "Yangi DB yaratadi", "Faylni yuklaydi"], a: 1 },
+            { t: "SQL Data", q: "INSERT so‘rovi qanday ishlaydi?", o: ["O'qish (Read)", "Yangi ma'lumot qo'shish (Create)", "O'zgartirish (Update)", "O'chirish (Delete)"], a: 1 },
+            { t: "SQL Data", q: "UPDATE so‘rovi nimaga xizmat qiladi?", o: ["Ma'lumot o'zgartirish", "Ma'lumot o'chirish", "Ma'lumot qo'shish", "Ma'lumot o'qish"], a: 0 },
+            { t: "SQLite", q: "SQLite nima?", o: ["Serverli DB", "Serverliksiz, faylga asoslangan yengil DB", "Onlayn xizmat", "Dastur"], a: 1 },
+            { t: "SQL Aggregation", q: "`COUNT(*)` funksiyasi nima qiladi?", o: ["Yig'indini hisoblaydi", "Qatorlar sonini sanaydi", "O'rtachani topadi", "Maksimumni topadi"], a: 1 }
         ];
 
         let currentQIndex = 0;
         let score = 0;
         let userAnswers = new Array(questions.length).fill(null);
+        let timerInterval;
+        let timeLeft = 40 * 60; // 40 minutes in seconds
 
-        // DOM Elements
+        // Elements
         const screens = document.querySelectorAll('.screen');
-        const startBtn = document.querySelector('#start-screen .btn-neon');
-        const nextBtn = document.getElementById('next-btn');
-        
+        const timerEl = document.getElementById('timer');
+
         function switchScreen(id) {
             screens.forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+        }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 40 * 60;
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    finishQuiz(true); // Force finish
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            timerEl.innerText = formatTime(timeLeft);
+            if (timeLeft < 60) {
+                timerEl.classList.add('warning');
+            } else {
+                timerEl.classList.remove('warning');
+            }
         }
 
         function startQuiz() {
@@ -460,59 +451,47 @@
             score = 0;
             userAnswers = new Array(questions.length).fill(null);
             switchScreen('quiz-screen');
+            startTimer();
             loadQuestion();
         }
 
         function loadQuestion() {
             const q = questions[currentQIndex];
             
-            // Update Header
-            document.getElementById('topic-badge').innerText = q.topic;
+            document.getElementById('topic-badge').innerText = q.t;
             document.getElementById('question-counter').innerText = `${currentQIndex + 1}/${questions.length}`;
             
-            // Update Progress
             const pct = ((currentQIndex) / questions.length) * 100;
             document.getElementById('progress-bar').style.width = `${pct}%`;
 
-            // Text
             document.getElementById('question-text').innerText = q.q;
 
-            // Options
             const container = document.getElementById('options-container');
             container.innerHTML = '';
             
-            q.options.forEach((opt, idx) => {
+            q.o.forEach((opt, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
                 btn.innerHTML = `<span style="opacity:0.6; margin-right:10px;">${String.fromCharCode(65+idx)}.</span> ${opt}`;
                 btn.onclick = () => selectOption(idx, btn);
                 
-                // Restore selection if going back (not implemented here but good practice)
-                if(userAnswers[currentQIndex] === idx) {
-                    btn.classList.add('selected');
-                }
-                
+                if(userAnswers[currentQIndex] === idx) btn.classList.add('selected');
                 container.appendChild(btn);
             });
 
-            nextBtn.disabled = true;
-            nextBtn.innerText = currentQIndex === questions.length - 1 ? "Yakunlash" : "Keyingi";
+            document.getElementById('next-btn').disabled = true;
+            document.getElementById('next-btn').innerText = currentQIndex === questions.length - 1 ? "Yakunlash" : "Keyingi";
         }
 
         function selectOption(idx, btn) {
-            // Remove selected class from siblings
             const siblings = btn.parentElement.children;
             for(let sib of siblings) sib.classList.remove('selected');
-            
-            // Add to clicked
             btn.classList.add('selected');
-            
             userAnswers[currentQIndex] = idx;
-            nextBtn.disabled = false;
+            document.getElementById('next-btn').disabled = false;
         }
 
         function nextQuestion() {
-            // Calculate score immediately
             if (userAnswers[currentQIndex] === questions[currentQIndex].a) {
                 score++;
             }
@@ -520,7 +499,6 @@
             currentQIndex++;
 
             if (currentQIndex < questions.length) {
-                // Simple transition effect
                 const qScreen = document.getElementById('quiz-screen');
                 qScreen.style.opacity = 0;
                 setTimeout(() => {
@@ -528,51 +506,79 @@
                     qScreen.style.opacity = 1;
                 }, 200);
             } else {
-                showResults();
+                finishQuiz();
             }
         }
 
-        function showResults() {
-            document.getElementById('progress-bar').style.width = '100%';
-            switchScreen('result-screen');
-
-            const percent = Math.round((score / questions.length) * 100);
+        function finishQuiz(forced = false) {
+            clearInterval(timerInterval);
             
-            // Animate Score Number
-            const scoreEl = document.getElementById('final-score');
-            let currentScore = 0;
-            const timer = setInterval(() => {
-                if(currentScore >= percent) clearInterval(timer);
-                else {
-                    currentScore++;
-                    scoreEl.innerText = currentScore;
-                }
-            }, 20);
+            // Calculate final results
+            let correct = 0;
+            let wrong = 0;
+            
+            // Generate Review List HTML
+            const reviewContainer = document.getElementById('review-list');
+            reviewContainer.innerHTML = '';
 
-            document.getElementById('correct-count').innerText = score;
-            document.getElementById('wrong-count').innerText = questions.length - score;
+            questions.forEach((q, i) => {
+                const userA = userAnswers[i];
+                const correctA = q.a;
+                let isCorrect = (userA === correctA);
+                
+                if (userA !== null) {
+                    if (isCorrect) correct++; else wrong++;
+                }
+
+                // Only show details for attempted or wrong answers? No, show all for review.
+                // Let's show all questions for clarity.
+                
+                const item = document.createElement('div');
+                item.className = `review-item ${isCorrect ? 'correct' : 'wrong'}`;
+                
+                let userAnsText = userA !== null ? q.o[userA] : "Javob berilmadi";
+                
+                item.innerHTML = `
+                    <span class="q-number">${i + 1}. ${q.q}</span>
+                    ${!isCorrect ? `
+                        <span class="ans-label" style="color:var(--error-color)">Sizning javobingiz: </span>
+                        <span class="ans-text your-ans-wrong">${userAnsText}</span>
+                        <br>
+                    ` : ''}
+                    <span class="ans-label" style="color:var(--success-color)">To'g'ri javob:</span>
+                    <span class="ans-text correct-ans">${q.o[correctA]}</span>
+                `;
+                reviewContainer.appendChild(item);
+            });
+
+            // Update Stats
+            const percent = Math.round((correct / questions.length) * 100);
+            document.getElementById('final-score').innerText = percent; // Or raw score
+            document.getElementById('correct-count').innerText = correct;
+            document.getElementById('wrong-count').innerText = wrong; // Includes unanswered if strictly logic, but here wrong means incorrect answers
             document.getElementById('percent-count').innerText = percent + '%';
 
-            const msg = document.getElementById('feedback-msg');
-            const detail = document.getElementById('feedback-detail');
+            // Adjust wrong count to include unanswered as wrong
+            const unanswered = questions.length - (correct + wrong);
+            const totalWrong = wrong + unanswered;
+            document.getElementById('wrong-count').innerText = totalWrong;
 
-            if(percent === 100) {
-                msg.innerText = "Cyber Legend!";
-                msg.style.color = "var(--success)";
-                detail.innerText = "Siz 30/30 natija qayd etdingiz. Python Master!";
-            } else if(percent >= 80) {
-                msg.innerText = "Excellent!";
-                msg.style.color = "var(--primary-neon)";
-                detail.innerText = "Juda yaxshi natija. Sizda mustahkam bilimlar bor.";
-            } else if(percent >= 50) {
-                msg.innerText = "Good Job";
-                msg.style.color = "var(--secondary-neon)";
-                detail.innerText = "Yarim yo‘l o‘tdingiz. Ba'zi mavzularni takrorlang.";
+            const title = document.getElementById('result-title');
+            if (forced) {
+                title.innerText = "Vaqt Tugadi!";
+                title.style.color = "var(--error-color)";
+            } else if (percent === 100) {
+                title.innerText = "Mukammal!";
+                title.style.color = "var(--success-color)";
+            } else if (percent >= 80) {
+                title.innerText = "Ajoyib!";
+                title.style.color = "var(--primary-neon)";
             } else {
-                msg.innerText = "Try Again";
-                msg.style.color = "var(--error)";
-                detail.innerText = "Bilimlaringizni mustahkamlash uchun ko‘proq mashq qiling.";
+                title.innerText = "Yaxshi";
+                title.style.color = "var(--text-color)";
             }
+
+            switchScreen('result-screen');
         }
 
         function restartQuiz() {
